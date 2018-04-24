@@ -35,7 +35,7 @@ arr1 = np.array(arr1)
 
 # Plot the rgb triples array and output to file.
 plt.imshow(-arr1, cmap=plt.cm.Greys)
-plt.savefig("particles.png")
+plt.savefig("HAADF_TEM_image.png")
 plt.close()
 
 # Example: How to threshold data.

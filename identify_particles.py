@@ -29,7 +29,7 @@ THRESHOLDING_VALUE = 60
 THRESHOLDING_MAX_VALUE = 255
 
 #Ignoring particles at borders
-BORDER_PADDING = 200 #pixels
+BORDER_PADDING = 100 #pixels
 
 #Load image
 image = cv2.imread("HAADF_TEM_image.png")
@@ -68,6 +68,7 @@ contours = contours[0] if cv2.__version__.startswith('2') else contours[1]
 
 #Ignore border elements
 store_index = []
+index_counter = 0
 for c in contours:
     for i in range([size[0] for size in [c.shape]][0]):
         pixel_location_x = c[i][0][0]
@@ -77,10 +78,15 @@ for c in contours:
             pixel_location_y > BORDER_PADDING and
             pixel_location_y < (IMAGE_HEIGHT-BORDER_PADDING)):
             
-#            print("Pixel location: ", pixel_location_x, ", ", pixel_location_y)
-            store_index.append(i)
-        else:
- #           print(i, "th Element not used")
+            store_index.append(index_counter)
+    index_counter += 1
+
+unique_index = set(store_index)
+
+new_contours = []
+for i in unique_index:
+    new_contours.append(contours[i])
+
 #Draw contours on the images (cv2.drawContours)
 # First argument = source image
 # Second argument = contours which should be passed as a list
@@ -88,10 +94,9 @@ for c in contours:
 # Other arguments = colors, line width...
 
 
-#image_with_contours = image.copy()
-#for c in new_contours:
-#    image_with_contours = cv2.drawContours(image_with_contours, 
-#                                           [c], -1, (0, 255, 0), 2)
-#
-#pylab.imshow()
-#
+image_with_contours = image.copy()
+for c in new_contours:
+    image_with_contours = cv2.drawContours(image_with_contours, 
+                                           [c], -1, (0, 255, 0), 2)
+
+pylab.imshow(image_with_contours)
